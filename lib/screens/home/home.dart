@@ -5,6 +5,7 @@ import 'package:doctor_app/api/order.dart';
 import 'package:doctor_app/models/appointments.dart';
 import 'package:doctor_app/screens/login/login.dart';
 import 'package:doctor_app/static/card.dart';
+import 'package:doctor_app/values/colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: mainColor,
         title: Text('Instant Doctor'),
         centerTitle: true,
         actions: [
@@ -45,7 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => LoginScreen()),
                     (Route<dynamic> route) => false);
               },
-              child: Icon(Icons.logout_outlined))
+              child: Padding(
+                padding: const EdgeInsets.only(right:8.0),
+                child: Icon(Icons.logout_outlined),
+              ))
         ],
       ),
       body: SafeArea(
@@ -61,23 +66,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: appointments.length,
                     itemBuilder: (BuildContext context, int index) {
                       String dateTime =
-                          appointments[index].time! + appointments[index].date!;
-                      return AppointmentCard(
-                        image: appointments[index].image == null
-                            ? Image.asset(
-                                'assets/images/5907.jpg',
-                                height: 70,
-                                width: 70,
-                                fit: BoxFit.cover,
-                              )
-                            : Image(
-                                image: NetworkImage(appointments[index].image!),
-                                height: 70,
-                                width: 70,
-                                fit: BoxFit.cover),
-                        name: appointments[index].drName,
-                        dateTime: dateTime,
+                          appointments[index].date! + ' '+ appointments[index].time!;
+                      return DoctorCard(
+                        // image: appointments[index].image == null
+                        //     ? Image.asset(
+                        //         'assets/images/5907.jpg',
+                        //         height: 70,
+                        //         width: 70,
+                        //         fit: BoxFit.cover,
+                        //       )
+                        //     : Image(
+                        //         image: NetworkImage(appointments[index].image!),
+                        //         height: 70,
+                        //         width: 70,
+                        //         fit: BoxFit.cover),
+                        name: appointments[index].name,
+                        appointment: dateTime,
                         hospital: appointments[index].hospital,
+                        doctorname: appointments[index].name,
                       );
                     }),
               ),

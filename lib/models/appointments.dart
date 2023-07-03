@@ -2,6 +2,7 @@
 
 class Appointments {
   int? id;
+  String? name;
   String? drName;
   String? time;
   String? date;
@@ -11,7 +12,8 @@ class Appointments {
 
   Appointments(appointments) {
     id = appointments['id'];
-    drName = appointments['patientname'];
+    name = appointments['patientname'];
+    drName = appointments['doctor']['name'];
     image = appointments['doctor']['image'];
     time = appointments['time'];
     date = appointments['date'];

@@ -1,60 +1,86 @@
-// ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_typing_uninitialized_variables
-
 import 'package:flutter/material.dart';
 
-class AppointmentCard extends StatelessWidget {
-  const AppointmentCard(
-      {super.key, this.name, this.dateTime, this.hospital, this.image});
+class DoctorCard extends StatelessWidget {
+  const DoctorCard({
+    Key? key,
+    this.doctorname,
+    this.name,
+    this.hospital,
+    this.appointment,
+  }) : super(key: key);
+
+  final doctorname;
   final name;
   final hospital;
-  final dateTime;
-  final image;
+  final appointment;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Column(
-              children: [
-                ClipRRect(
-                        borderRadius: BorderRadius.circular(10), child: image)
-              ],
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      // height: 120,
+      decoration: const BoxDecoration(
+        color: Color(0xFFffffff),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 15.0, // soften the shadow
+            spreadRadius: 5.0, //extend the shadow
+            offset: Offset(
+              5.0, // Move to right 5  horizontally
+              5.0, // Move to bottom 5 Vertically
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Pt.' + name,
-                    style: TextStyle(
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: Colors.black45),
+                child: Image.asset(
+                  'assets/images/doctor.png',
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  doctorname,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 17,
+                  ),
+                ),
+                Text(
+                  name,
+                  style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 17,
-                    ),
-                  ),
-                  Text(
-                    dateTime,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 17,
-                        color: Colors.grey),
-                  ),
-                  Text(
-                    hospital,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 17,
-                        color: Colors.grey),
-                  ),
-                ],
-              ),
+                      color: Colors.grey),
+                ),
+                Row(
+                  children: [Icon(Icons.calendar_month), Text(appointment)],
+                ),
+                Row(
+                  children: [Icon(Icons.location_on), Text(hospital)],
+                )
+              ],
             ),
-          ],
-        ),
-        Divider()
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

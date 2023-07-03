@@ -8,7 +8,6 @@ import 'package:doctor_app/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -43,37 +42,29 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset('assets/images/doctor.png', height: 160, width: 160),
+              SizedBox(height: 16),
               Container(
                 child: Text(
                   'Welcome, on Instant Dr.',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 23),
                 ),
               ),
-              // Container(
-              //   padding: EdgeInsets.only(bottom: 66, top: 8),
-              //   child: Text(
-              //     'Login now for find doctor',
-              //     style: TextStyle(
-              //         fontWeight: FontWeight.w400,
-              //         fontSize: 17,
-              //         color: Color.fromARGB(255, 29, 132, 33)),
-              //   ),
-              // ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 21),
                 child: InputField(
                   hint: 'Enter Your Email:',
                   controller: emailController,
                   type: TextInputType.emailAddress,
-
                 ),
               ),
               InputField(
                 hint: 'Enter Your Password:',
                 obscure: true,
                 controller: passwordController,
-
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10, top: 28),
@@ -86,7 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
               ),
-           
             ],
           ),
         ),
