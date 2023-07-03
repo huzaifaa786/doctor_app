@@ -18,9 +18,9 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seen = (prefs.getBool('seen') ?? false);
+    // bool seen = (prefs.getBool('seen') ?? false);
 
-    if (seen) {
+    // if (seen) {
       {
         final String? authCheck = prefs.getString('api_token');
         if (authCheck == null) {
@@ -31,11 +31,11 @@ class _SplashScreenState extends State<SplashScreen> {
               MaterialPageRoute(builder: (context) => HomeScreen()));
         }
       }
-    } else {
-      await prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => IntroScreen()));
-    }
+    // } else {
+    //   await prefs.setBool('seen', true);
+    //   Navigator.of(context).pushReplacement(
+    //       MaterialPageRoute(builder: (context) => IntroScreen()));
+    // }
   }
 
   @override
