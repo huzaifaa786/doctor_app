@@ -1,28 +1,24 @@
 import 'package:doctor_app/api/api.dart';
 import 'package:doctor_app/helpers/loading.dart';
-import 'package:doctor_app/models/appointment.dart';
+import 'package:doctor_app/models/appointments.dart';
 import 'package:doctor_app/values/url.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderApi {
-  static orderget() async { 
+      static getAppointments() async {
     LoadingHelper.show();
-    var url = BASE_URL + 'order/get';
-    var data;
+    var url = BASE_URL + 'order/doctor';
     final prefs = await SharedPreferences.getInstance();
-    print(prefs.getString('api_token'));
-    data = {'api_token': prefs.getString('api_token')!};
-
+    var data = {
+      'api_token': prefs.getString('api_token'),
+    };
     var response = await Api.execute(url: url, data: data);
-    LoadingHelper.dismiss();
-    if (!response['error']) {
-      Order? user = Order(response['user']);
-      print(user);
-      return user;
-    } else {
-      Fluttertoast.showToast(msg: response['error_data']);
-      return false;
+    print(response['order']);
+    List<Appointments> appointment = <Appointments>[];
+    for (var doctor in response['order']) {
+      appointment.add(Appointments(doctor));
     }
-  } 
+    LoadingHelper.dismiss();
+    return appointment;
+  }
 }

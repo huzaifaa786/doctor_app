@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+
+import 'package:doctor_app/api/auth.dart';
 import 'package:doctor_app/api/order.dart';
-import 'package:doctor_app/values/colors.dart';
+import 'package:doctor_app/models/appointments.dart';
+import 'package:doctor_app/screens/login/login.dart';
+import 'package:doctor_app/static/card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,109 +15,73 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Appointments> appointments = [];
+  getAppointments() async {
+    var mappointments = await OrderApi.getAppointments();
+    setState(() {
+      appointments = mappointments;
+    });
+  }
 
-   void initState() {
+  @override
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getdoctors();
+      getAppointments();
     });
   }
-   getdoctors() async {
-    var mDoctors = await OrderApi.orderget();
-    setState(() {
-      
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Instant Doctor'),
+        centerTitle: true,
+        actions: [
+          InkWell(
+              onTap: () async {
+                await AuthApi.logout();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false);
+              },
+              child: Icon(Icons.logout_outlined))
+        ],
+      ),
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
         child: Column(
           children: [
-            SizedBox(
-              height: 100,
+            SizedBox(height: 8),
+            Flexible(
+              child: SizedBox(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: appointments.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String dateTime =
+                          appointments[index].time! + appointments[index].date!;
+                      return AppointmentCard(
+                        image: appointments[index].image == null
+                            ? Image.asset(
+                                'assets/images/5907.jpg',
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover,
+                              )
+                            : Image(
+                                image: NetworkImage(appointments[index].image!),
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover),
+                        name: appointments[index].drName,
+                        dateTime: dateTime,
+                        hospital: appointments[index].hospital,
+                      );
+                    }),
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ToggleSwitch(
-                  activeFgColor: Colors.white,
-                  inactiveBgColor: Colors.white,
-                  inactiveFgColor: Colors.black,
-                  minWidth: 190.0,
-                  initialLabelIndex: 0,
-                  totalSwitches: 2,
-                  activeBgColors: [
-                    [mainColor],
-                    [mainColor],
-                  ],
-                  labels: ['Today', 'previous'],
-                  onToggle: (index) {
-                    print('switched to: $index');
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            //  controller.notifications.length != 0
-            //     ? Padding(
-            //         padding: const EdgeInsets.only(left: 12, right: 12),
-            //         child: Flexible(
-            //           child: Container(
-            //             height: MediaQuery.of(context).size.height * 0.81,
-            //             child: ListView.builder(
-            //                 itemCount: controller.notifications.length,
-            //                 itemBuilder: (context, index) => NotificationTile(
-            //                       ontap: controller.notifications[index].orderr!
-            //                                   .status ==
-            //                               '3'
-            //                           ? () {
-            //                               showModalBottomSheet(
-            //                                 context: context,
-            //                                 isScrollControlled: true,
-            //                                 shape: const RoundedRectangleBorder(
-            //                                   borderRadius:
-            //                                       BorderRadius.vertical(
-            //                                     top: Radius.circular(40),
-            //                                   ),
-            //                                 ),
-            //                                 builder: (context) => Wrap(
-            //                                     children: [
-            //                                       NotificationModal(
-            //                                           notification: controller
-            //                                               .notifications[index])
-            //                                     ]),
-            //                               );
-            //                             }
-            //                           : () {},
-            //                       name: controller
-            //                           .notifications[index].vendor!.username,
-            //                       image: controller
-            //                           .notifications[index].vendor!.profilePic,
-            //                       title: controller.notifications[index].title,
-            //                       status: controller
-            //                           .notifications[index].orderr!.status,
-            //                     )),
-            //           ),
-            //         ),
-            //       )
-            // : Flexible(
-            //     child: Container(
-            //       height: MediaQuery.of(context).size.height * 0.81,
-            //       width: MediaQuery.of(context).size.width,
-            //       child: Column(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         crossAxisAlignment: CrossAxisAlignment.center,
-            //         children: [
-            //           Text("No Notification Found!"),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
           ],
         ),
       )),
